@@ -175,10 +175,17 @@ const ProfileAvatar = styled.div`
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
+  overflow: hidden;
 
   &:hover {
     transform: scale(1.1);
     box-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
+  }
+  
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 `;
 
@@ -484,11 +491,30 @@ interface ModernDashboardProps {
 const ModernDashboard: React.FC<ModernDashboardProps> = ({ user, onLogout, onNavigateToChat }) => {
   const [activeNav, setActiveNav] = useState('dashboard');
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [userProfile, setUserProfile] = useState(() => {
+    // Load user profile from localStorage
+    const savedProfile = localStorage.getItem('userProfile');
+    if (savedProfile) {
+      try {
+        return JSON.parse(savedProfile);
+      } catch (error) {
+        console.error('Error parsing saved profile:', error);
+      }
+    }
+    return {
+      name: user?.name || 'Demo User',
+      avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=demo&backgroundColor=b6e3f4'
+    };
+  });
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
     return () => clearInterval(timer);
   }, []);
+  
+  const handleProfileUpdate = (profileData: any) => {
+    setUserProfile(profileData);
+  };
 
   const getGreeting = () => {
     const hour = currentTime.getHours();
@@ -538,7 +564,7 @@ const ModernDashboard: React.FC<ModernDashboardProps> = ({ user, onLogout, onNav
       case 'wellness':
         return <WellnessView user={user} />;
       case 'profile':
-        return <EnhancedProfileView />;
+        return <EnhancedProfileView onProfileUpdate={handleProfileUpdate} />;
       case 'settings':
         return <SettingsView user={user} />;
       case 'dashboard':
@@ -690,13 +716,17 @@ const ModernDashboard: React.FC<ModernDashboardProps> = ({ user, onLogout, onNav
       <MainContent>
         <TopBar>
           <Greeting>
-            <h2>{getGreeting()}, {user?.name || 'Friend'}!</h2>
+            <h2>{getGreeting()}, {userProfile?.name || user?.name || 'Friend'}!</h2>
             <p>✨ {todayQuote}</p>
           </Greeting>
           <TopBarActions>
             <Bell size={20} color="rgba(255, 255, 255, 0.7)" style={{ cursor: 'pointer' }} />
-            <ProfileAvatar>
-              {user?.name?.charAt(0) || 'U'}
+            <ProfileAvatar onClick={() => setActiveNav('profile')}>
+              {userProfile?.avatar ? (
+                <img src={userProfile.avatar} alt="Profile" />
+              ) : (
+                userProfile?.name?.charAt(0) || user?.name?.charAt(0) || 'U'
+              )}
             </ProfileAvatar>
             <LogoutButton onClick={onLogout}>
               <LogOut size={16} />

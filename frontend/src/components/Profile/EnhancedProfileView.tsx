@@ -307,26 +307,59 @@ interface ProfileData {
   email: string;
 }
 
-const EnhancedProfileView: React.FC = () => {
+interface EnhancedProfileViewProps {
+  onProfileUpdate?: (profile: ProfileData) => void;
+}
+
+const EnhancedProfileView: React.FC<EnhancedProfileViewProps> = ({ onProfileUpdate }) => {
   const [activeTab, setActiveTab] = useState<'view' | 'edit'>('view');
-  const [profileData, setProfileData] = useState<ProfileData>({
-    name: 'Demo User',
-    bio: 'Mental wellness enthusiast exploring the journey of self-discovery',
-    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=demo&backgroundColor=b6e3f4',
-    location: 'San Francisco, CA',
-    birthday: '1990-01-01',
-    occupation: 'Software Developer',
-    phone: '+1 (555) 123-4567',
-    email: 'demo@mindchat.com'
+  const [profileData, setProfileData] = useState<ProfileData>(() => {
+    // Load profile data from localStorage or use defaults
+    const savedProfile = localStorage.getItem('userProfile');
+    if (savedProfile) {
+      try {
+        return JSON.parse(savedProfile);
+      } catch (error) {
+        console.error('Error parsing saved profile:', error);
+      }
+    }
+    return {
+      name: 'Demo User',
+      bio: 'Mental wellness enthusiast exploring the journey of self-discovery',
+      avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=demo&backgroundColor=b6e3f4',
+      location: 'San Francisco, CA',
+      birthday: '1990-01-01',
+      occupation: 'Software Developer',
+      phone: '+1 (555) 123-4567',
+      email: 'demo@mindchat.com'
+    };
   });
   const [loading, setLoading] = useState(false);
 
-  const handleSaveProfile = async () => {
+  const handleSaveProfile = async (e?: React.FormEvent) => {
+    // Prevent form submission if called from a form
+    if (e) {
+      e.preventDefault();
+    }
+    
     setLoading(true);
     try {
+      // Save to localStorage
+      localStorage.setItem('userProfile', JSON.stringify(profileData));
+      
+      // Notify parent component about profile update
+      if (onProfileUpdate) {
+        onProfileUpdate(profileData);
+      }
+      
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      // Switch to view mode without refreshing
       setActiveTab('view');
+      
+      // Show success message (you could add a toast notification here)
+      console.log('Profile saved successfully!');
     } catch (error) {
       console.error('Failed to save profile:', error);
     } finally {
@@ -339,7 +372,16 @@ const EnhancedProfileView: React.FC = () => {
     const backgrounds = ['b6e3f4', 'c0aede', 'd1d4f9', 'ffd5dc', 'ffdfbf'];
     const randomBg = backgrounds[Math.floor(Math.random() * backgrounds.length)];
     const newAvatar = `https://api.dicebear.com/7.x/avataaars/svg?seed=${seed}&backgroundColor=${randomBg}`;
-    setProfileData(prev => ({ ...prev, avatar: newAvatar }));
+    const updatedProfile = { ...profileData, avatar: newAvatar };
+    setProfileData(updatedProfile);
+    
+    // Save to localStorage immediately
+    localStorage.setItem('userProfile', JSON.stringify(updatedProfile));
+    
+    // Update parent component
+    if (onProfileUpdate) {
+      onProfileUpdate(updatedProfile);
+    }
   };
 
   const getPresetAvatars = () => {
@@ -455,9 +497,18 @@ const EnhancedProfileView: React.FC = () => {
         <Label>Or choose from presets:</Label>
         <AvatarOptionsGrid>
           {getPresetAvatars().map((avatarUrl, index) => (
-            <AvatarOption 
+        <AvatarOption 
               key={index} 
-              onClick={() => setProfileData(prev => ({ ...prev, avatar: avatarUrl }))}
+              onClick={() => {
+                const updatedProfile = { ...profileData, avatar: avatarUrl };
+                setProfileData(updatedProfile);
+                // Save to localStorage immediately
+                localStorage.setItem('userProfile', JSON.stringify(updatedProfile));
+                // Update parent component
+                if (onProfileUpdate) {
+                  onProfileUpdate(updatedProfile);
+                }
+              }}
             >
               <img src={avatarUrl} alt={`Avatar option ${index + 1}`} />
             </AvatarOption>
