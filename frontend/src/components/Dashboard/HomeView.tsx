@@ -18,6 +18,17 @@ const pulse = keyframes`
   100% { transform: scale(1); }
 `;
 
+const glow = keyframes`
+  0% { box-shadow: 0 0 10px rgba(102, 126, 234, 0.4); }
+  50% { box-shadow: 0 0 25px rgba(102, 126, 234, 0.8), 0 0 35px rgba(102, 126, 234, 0.6); }
+  100% { box-shadow: 0 0 10px rgba(102, 126, 234, 0.4); }
+`;
+
+const shimmer = keyframes`
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+`;
+
 // Main Container
 const HomeContainer = styled.div`
   padding: 2rem;
@@ -98,6 +109,7 @@ const StatCard = styled.div<{ color: string }>`
   padding: 1.5rem;
   transition: all 0.3s ease;
   position: relative;
+  overflow: hidden;
 
   &::before {
     content: '';
@@ -118,9 +130,41 @@ const StatCard = styled.div<{ color: string }>`
     border-radius: 16px 16px 0 0;
   }
 
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left 0.6s;
+  }
+
   &:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), ${props => {
+      switch (props.color) {
+        case 'blue': return '0 0 30px rgba(59, 130, 246, 0.5)';
+        case 'green': return '0 0 30px rgba(16, 185, 129, 0.5)';
+        case 'purple': return '0 0 30px rgba(139, 92, 246, 0.5)';
+        case 'orange': return '0 0 30px rgba(245, 158, 11, 0.5)';
+        default: return '0 0 30px rgba(102, 126, 234, 0.5)';
+      }
+    }};
+    border-color: ${props => {
+      switch (props.color) {
+        case 'blue': return 'rgba(59, 130, 246, 0.6)';
+        case 'green': return 'rgba(16, 185, 129, 0.6)';
+        case 'purple': return 'rgba(139, 92, 246, 0.6)';
+        case 'orange': return 'rgba(245, 158, 11, 0.6)';
+        default: return 'rgba(102, 126, 234, 0.6)';
+      }
+    }};
+    
+    &::after {
+      left: 100%;
+    }
   }
 `;
 
@@ -132,6 +176,7 @@ const StatIcon = styled.div<{ color: string }>`
   align-items: center;
   justify-content: center;
   margin-bottom: 1rem;
+  transition: all 0.3s ease;
   background: ${props => {
     switch (props.color) {
       case 'blue': return 'rgba(59, 130, 246, 0.2)';
@@ -150,6 +195,19 @@ const StatIcon = styled.div<{ color: string }>`
       default: return '#667eea';
     }
   }};
+
+  ${StatCard}:hover & {
+    transform: scale(1.1);
+    box-shadow: ${props => {
+      switch (props.color) {
+        case 'blue': return '0 0 20px rgba(59, 130, 246, 0.6)';
+        case 'green': return '0 0 20px rgba(16, 185, 129, 0.6)';
+        case 'purple': return '0 0 20px rgba(139, 92, 246, 0.6)';
+        case 'orange': return '0 0 20px rgba(245, 158, 11, 0.6)';
+        default: return '0 0 20px rgba(102, 126, 234, 0.6)';
+      }
+    }};
+  }
 `;
 
 const StatValue = styled.div`
@@ -321,6 +379,211 @@ const GoalMeta = styled.div`
   color: rgba(255, 255, 255, 0.7);
 `;
 
+// Quick Actions Section
+const QuickActionsSection = styled.div`
+  margin: 3rem 0;
+`;
+
+const QuickActionsGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+`;
+
+const QuickActionCard = styled.div<{ color: string }>`
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 2rem;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: ${props => {
+      switch (props.color) {
+        case 'blue': return 'linear-gradient(90deg, #3b82f6, #60a5fa)';
+        case 'green': return 'linear-gradient(90deg, #10b981, #34d399)';
+        case 'purple': return 'linear-gradient(90deg, #8b5cf6, #a78bfa)';
+        default: return 'linear-gradient(90deg, #667eea, #764ba2)';
+      }
+    }};
+    border-radius: 20px 20px 0 0;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
+    transition: left 0.5s;
+  }
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), ${props => {
+      switch (props.color) {
+        case 'blue': return '0 0 25px rgba(59, 130, 246, 0.4)';
+        case 'green': return '0 0 25px rgba(16, 185, 129, 0.4)';
+        case 'purple': return '0 0 25px rgba(139, 92, 246, 0.4)';
+        default: return '0 0 25px rgba(102, 126, 234, 0.4)';
+      }
+    }};
+    border-color: ${props => {
+      switch (props.color) {
+        case 'blue': return 'rgba(59, 130, 246, 0.5)';
+        case 'green': return 'rgba(16, 185, 129, 0.5)';
+        case 'purple': return 'rgba(139, 92, 246, 0.5)';
+        default: return 'rgba(102, 126, 234, 0.5)';
+      }
+    }};
+    
+    &::after {
+      left: 100%;
+    }
+  }
+`;
+
+const QuickActionIcon = styled.div<{ color: string }>`
+  width: 60px;
+  height: 60px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  transition: all 0.3s ease;
+  background: ${props => {
+    switch (props.color) {
+      case 'blue': return 'rgba(59, 130, 246, 0.2)';
+      case 'green': return 'rgba(16, 185, 129, 0.2)';
+      case 'purple': return 'rgba(139, 92, 246, 0.2)';
+      default: return 'rgba(102, 126, 234, 0.2)';
+    }
+  }};
+  color: ${props => {
+    switch (props.color) {
+      case 'blue': return '#3b82f6';
+      case 'green': return '#10b981';
+      case 'purple': return '#8b5cf6';
+      default: return '#667eea';
+    }
+  }};
+
+  ${QuickActionCard}:hover & {
+    transform: scale(1.1);
+    box-shadow: ${props => {
+      switch (props.color) {
+        case 'blue': return '0 0 25px rgba(59, 130, 246, 0.6)';
+        case 'green': return '0 0 25px rgba(16, 185, 129, 0.6)';
+        case 'purple': return '0 0 25px rgba(139, 92, 246, 0.6)';
+        default: return '0 0 25px rgba(102, 126, 234, 0.6)';
+      }
+    }};
+  }
+`;
+
+const QuickActionTitle = styled.h3`
+  color: #ffffff;
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+`;
+
+const QuickActionDescription = styled.p`
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.5;
+  font-size: 0.95rem;
+`;
+
+// Analytics Section (Coming Soon)
+const AnalyticsSection = styled.div`
+  margin: 3rem 0;
+`;
+
+const AnalyticsGrid = styled.div`
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+  
+  @media (max-width: 1024px) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+const AnalyticsCard = styled.div`
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 2rem;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
+    transition: left 0.5s;
+  }
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2), 0 0 20px rgba(102, 126, 234, 0.3);
+    border-color: rgba(102, 126, 234, 0.4);
+    
+    &::after {
+      left: 100%;
+    }
+  }
+`;
+
+const ComingSoonContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  text-align: center;
+`;
+
+const ComingSoonIcon = styled.div`
+  font-size: 3rem;
+  margin-bottom: 1rem;
+`;
+
+const ComingSoonText = styled.div`
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 1.1rem;
+  font-weight: 500;
+`;
+
+const StatChange = styled.div<{ positive: boolean }>`
+  font-size: 0.8rem;
+  font-weight: 500;
+  margin-top: 0.5rem;
+  color: ${props => props.positive ? '#10b981' : '#ef4444'};
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+`;
+
 interface HomeViewProps {
   user: any;
   onNavigateToChat?: () => void;
@@ -384,36 +647,52 @@ const HomeView: React.FC<HomeViewProps> = ({ user, onNavigateToChat }) => {
       </WelcomeSection>
 
       <StatsOverview>
+        <StatCard color="green">
+          <StatIcon color="green">
+            <MessageSquare size={24} />
+          </StatIcon>
+          <StatValue>24</StatValue>
+          <StatLabel>Total Conversations</StatLabel>
+          <StatChange positive={true}>
+            <TrendingUp size={12} />
+            +15% this week
+          </StatChange>
+        </StatCard>
+
         <StatCard color="blue">
           <StatIcon color="blue">
             <TrendingUp size={24} />
           </StatIcon>
-          <StatValue>8.2</StatValue>
+          <StatValue>7.8</StatValue>
           <StatLabel>Average Mood Score</StatLabel>
-        </StatCard>
-
-        <StatCard color="green">
-          <StatIcon color="green">
-            <CheckCircle size={24} />
-          </StatIcon>
-          <StatValue>12</StatValue>
-          <StatLabel>Goals Completed</StatLabel>
-        </StatCard>
-
-        <StatCard color="purple">
-          <StatIcon color="purple">
-            <Activity size={24} />
-          </StatIcon>
-          <StatValue>45</StatValue>
-          <StatLabel>Sessions This Month</StatLabel>
+          <StatChange positive={false}>
+            <TrendingUp size={12} style={{ transform: 'rotate(180deg)' }} />
+            -0.5 this month
+          </StatChange>
         </StatCard>
 
         <StatCard color="orange">
           <StatIcon color="orange">
-            <Award size={24} />
+            <Heart size={24} />
           </StatIcon>
-          <StatValue>7</StatValue>
-          <StatLabel>Day Streak</StatLabel>
+          <StatValue>18</StatValue>
+          <StatLabel>Mood Check-ins</StatLabel>
+          <StatChange positive={true}>
+            <TrendingUp size={12} />
+            3 this week
+          </StatChange>
+        </StatCard>
+
+        <StatCard color="purple">
+          <StatIcon color="purple">
+            <CheckCircle size={24} />
+          </StatIcon>
+          <StatValue>Safe</StatValue>
+          <StatLabel>Safety & Support</StatLabel>
+          <StatChange positive={true}>
+            <CheckCircle size={12} />
+            All systems active
+          </StatChange>
         </StatCard>
       </StatsOverview>
 
@@ -454,29 +733,73 @@ const HomeView: React.FC<HomeViewProps> = ({ user, onNavigateToChat }) => {
         </ActivityCard>
       </RecentActivity>
 
-      <GoalsSection>
+      <QuickActionsSection>
         <SectionTitle>
-          <Target size={20} />
-          Weekly Goals Progress
+          <Zap size={20} />
+          Quick Actions
         </SectionTitle>
-        <GoalsGrid>
-          {goals.map((goal, index) => (
-            <GoalCard key={index}>
-              <GoalHeader>
-                <GoalTitle>{goal.title}</GoalTitle>
-                <span style={{ color: '#10b981', fontWeight: '600' }}>{goal.progress}%</span>
-              </GoalHeader>
-              <GoalProgress>
-                <GoalProgressBar progress={goal.progress} color={goal.color} />
-              </GoalProgress>
-              <GoalMeta>
-                <span>{goal.current} / {goal.target}</span>
-                <CheckCircle size={16} />
-              </GoalMeta>
-            </GoalCard>
-          ))}
-        </GoalsGrid>
-      </GoalsSection>
+        <QuickActionsGrid>
+          <QuickActionCard color="blue" onClick={onNavigateToChat}>
+            <QuickActionIcon color="blue">
+              <MessageSquare size={28} />
+            </QuickActionIcon>
+            <QuickActionTitle>Start New Chat</QuickActionTitle>
+            <QuickActionDescription>
+              Begin a conversation with your AI companion for support and guidance.
+            </QuickActionDescription>
+          </QuickActionCard>
+
+          <QuickActionCard color="green">
+            <QuickActionIcon color="green">
+              <Heart size={28} />
+            </QuickActionIcon>
+            <QuickActionTitle>Mood Check-In</QuickActionTitle>
+            <QuickActionDescription>
+              Track how you're feeling today and get personalized insights.
+            </QuickActionDescription>
+          </QuickActionCard>
+
+          <QuickActionCard color="purple">
+            <QuickActionIcon color="purple">
+              <Wind size={28} />
+            </QuickActionIcon>
+            <QuickActionTitle>Breathing Exercise</QuickActionTitle>
+            <QuickActionDescription>
+              Take a moment to center yourself with guided breathing techniques.
+            </QuickActionDescription>
+          </QuickActionCard>
+        </QuickActionsGrid>
+      </QuickActionsSection>
+
+      <AnalyticsSection>
+        <SectionTitle>
+          <Activity size={20} />
+          Wellness Analytics
+        </SectionTitle>
+        <AnalyticsGrid>
+          <AnalyticsCard>
+            <SectionTitle style={{ marginBottom: '1rem' }}>
+              <TrendingUp size={20} />
+              Mood Tracking Over Time
+            </SectionTitle>
+            <ComingSoonContainer>
+              <ComingSoonIcon>📈</ComingSoonIcon>
+              <ComingSoonText>Interactive Mood Chart Coming Soon</ComingSoonText>
+            </ComingSoonContainer>
+          </AnalyticsCard>
+
+          <AnalyticsCard>
+            <SectionTitle style={{ marginBottom: '1rem' }}>
+              <Target size={20} />
+              Stress Factors Analysis
+            </SectionTitle>
+            <ComingSoonContainer>
+              <ComingSoonIcon>🥧</ComingSoonIcon>
+              <ComingSoonText>Pie Chart Analysis</ComingSoonText>
+            </ComingSoonContainer>
+          </AnalyticsCard>
+        </AnalyticsGrid>
+      </AnalyticsSection>
     </HomeContainer>
   );
 };
