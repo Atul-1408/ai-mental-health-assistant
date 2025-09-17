@@ -262,7 +262,7 @@ interface ChecklistItemType {
   id: string;
   title: string;
   description: string;
-  icon: React.ComponentType<any>;
+  icon: string;
   category: string;
   completed: boolean;
 }
@@ -270,20 +270,20 @@ interface ChecklistItemType {
 const SelfCareChecklist: React.FC<SelfCareChecklistProps> = ({ show, onClose }) => {
   const [items, setItems] = useState<ChecklistItemType[]>([
     // Physical Wellness
-    { id: '1', title: 'Drink 8 glasses of water', description: 'Stay hydrated throughout the day', icon: Droplets, category: 'Physical', completed: false },
-    { id: '2', title: 'Take a 10-minute walk', description: 'Get some fresh air and movement', icon: Sun, category: 'Physical', completed: false },
-    { id: '3', title: 'Eat a nutritious meal', description: 'Fuel your body with healthy food', icon: Heart, category: 'Physical', completed: false },
-    { id: '4', title: 'Get 7-8 hours of sleep', description: 'Rest and recharge your body', icon: Moon, category: 'Physical', completed: false },
+    { id: '1', title: 'Drink 8 glasses of water', description: 'Stay hydrated throughout the day', icon: 'Droplets', category: 'Physical', completed: false },
+    { id: '2', title: 'Take a 10-minute walk', description: 'Get some fresh air and movement', icon: 'Sun', category: 'Physical', completed: false },
+    { id: '3', title: 'Eat a nutritious meal', description: 'Fuel your body with healthy food', icon: 'Heart', category: 'Physical', completed: false },
+    { id: '4', title: 'Get 7-8 hours of sleep', description: 'Rest and recharge your body', icon: 'Moon', category: 'Physical', completed: false },
 
     // Mental Wellness
-    { id: '5', title: '5 minutes of meditation', description: 'Practice mindfulness and calm your mind', icon: Leaf, category: 'Mental', completed: false },
-    { id: '6', title: 'Write in gratitude journal', description: 'Note 3 things you\'re grateful for', icon: Book, category: 'Mental', completed: false },
-    { id: '7', title: 'Listen to uplifting music', description: 'Boost your mood with favorite songs', icon: Music, category: 'Mental', completed: false },
-    { id: '8', title: 'Practice positive self-talk', description: 'Speak kindly to yourself today', icon: Smile, category: 'Mental', completed: false },
+    { id: '5', title: '5 minutes of meditation', description: 'Practice mindfulness and calm your mind', icon: 'Leaf', category: 'Mental', completed: false },
+    { id: '6', title: 'Write in gratitude journal', description: 'Note 3 things you\'re grateful for', icon: 'Book', category: 'Mental', completed: false },
+    { id: '7', title: 'Listen to uplifting music', description: 'Boost your mood with favorite songs', icon: 'Music', category: 'Mental', completed: false },
+    { id: '8', title: 'Practice positive self-talk', description: 'Speak kindly to yourself today', icon: 'Smile', category: 'Mental', completed: false },
 
     // Social Wellness
-    { id: '9', title: 'Connect with a friend', description: 'Reach out to someone you care about', icon: Phone, category: 'Social', completed: false },
-    { id: '10', title: 'Express appreciation', description: 'Thank someone or show gratitude', icon: Heart, category: 'Social', completed: false }
+    { id: '9', title: 'Connect with a friend', description: 'Reach out to someone you care about', icon: 'Phone', category: 'Social', completed: false },
+    { id: '10', title: 'Express appreciation', description: 'Thank someone or show gratitude', icon: 'Heart', category: 'Social', completed: false }
   ]);
 
   // Load saved progress
@@ -337,6 +337,18 @@ const SelfCareChecklist: React.FC<SelfCareChecklistProps> = ({ show, onClose }) 
     acc[item.category].push(item);
     return acc;
   }, {} as Record<string, ChecklistItemType[]>);
+
+  const iconMap = {
+    Droplets,
+    Sun,
+    Heart,
+    Moon,
+    Leaf,
+    Book,
+    Music,
+    Smile,
+    Phone
+  };
 
   const categoryIcons = {
     Physical: Heart,
@@ -392,7 +404,7 @@ const SelfCareChecklist: React.FC<SelfCareChecklistProps> = ({ show, onClose }) 
                     </CheckIcon>
                     <ItemIcon completed={item.completed}>
                       {(() => {
-                        const IconComponent = item.icon;
+                        const IconComponent = iconMap[item.icon as keyof typeof iconMap] || Heart;
                         return <IconComponent size={20} />;
                       })()}
                     </ItemIcon>
