@@ -1,0 +1,123 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #f7fafc;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+/* Custom scrollbar styles */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Dark mode styles */
+body.dark-mode {
+  background-color: #1a1a1a !important;
+  color: #ffffff !important;
+}
+
+body.dark-mode ::-webkit-scrollbar-track {
+  background: #2d2d2d;
+}
+
+body.dark-mode ::-webkit-scrollbar-thumb {
+  background: #555;
+}
+
+body.dark-mode ::-webkit-scrollbar-thumb:hover {
+  background: #777;
+}
+
+/* Dark mode for all major components */
+body.dark-mode div,
+body.dark-mode section,
+body.dark-mode article,
+body.dark-mode aside,
+body.dark-mode nav,
+body.dark-mode header,
+body.dark-mode footer {
+  background-color: #2d2d2d !important;
+  color: #ffffff !important;
+}
+
+/* Text colors in dark mode */
+body.dark-mode h1,
+body.dark-mode h2, 
+body.dark-mode h3,
+body.dark-mode h4,
+body.dark-mode h5,
+body.dark-mode h6,
+body.dark-mode p,
+body.dark-mode span,
+body.dark-mode div {
+  color: #ffffff !important;
+}
+
+/* Secondary text in dark mode */
+body.dark-mode .secondary-text,
+body.dark-mode [style*="color: #718096"],
+body.dark-mode [style*="color:#718096"] {
+  color: #a0a0a0 !important;
+}
+
+/* Input fields in dark mode */
+body.dark-mode input,
+body.dark-mode textarea,
+body.dark-mode select {
+  background-color: #3a3a3a !important;
+  color: #ffffff !important;
+  border-color: #555 !important;
+}
+
+/* Buttons in dark mode */
+body.dark-mode button:not([style*="background: linear-gradient"]) {
+  background-color: #3a3a3a !important;
+  color: #ffffff !important;
+  border-color: #555 !important;
+}
+
+/* Chat interface specific */
+body.dark-mode div[style*="background: linear-gradient(180deg, #f7fafc 0%, #edf2f7 100%)"] {
+  background: linear-gradient(180deg, #2a2a2a 0%, #1a1a1a 100%) !important;
+}
+
+/* Override white backgrounds specifically */
+body.dark-mode div[style*="background: white"],
+body.dark-mode div[style*="background:#ffffff"],
+body.dark-mode div[style*="background-color: white"] {
+  background: #2d2d2d !important;
+}
+
+/* Loading animation */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
