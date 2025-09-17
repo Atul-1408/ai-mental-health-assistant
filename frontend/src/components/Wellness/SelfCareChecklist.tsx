@@ -391,7 +391,10 @@ const SelfCareChecklist: React.FC<SelfCareChecklistProps> = ({ show, onClose }) 
                       {item.completed ? <CheckCircle size={24} /> : <Circle size={24} />}
                     </CheckIcon>
                     <ItemIcon completed={item.completed}>
-                      <item.icon size={20} />
+                      {(() => {
+                        const IconComponent = item.icon;
+                        return <IconComponent size={20} />;
+                      })()}
                     </ItemIcon>
                     <ItemContent>
                       <ItemTitle completed={item.completed}>
