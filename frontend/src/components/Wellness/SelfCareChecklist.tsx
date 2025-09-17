@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled, { keyframes, css } from 'styled-components';
 import {
   X, CheckCircle, Circle, Heart, Sun, Droplets, 
-  Moon, Coffee, Book, Phone, Leaf, Music, 
+  Moon, Book, Phone, Leaf, Music, 
   Smile, Award, RotateCcw
 } from 'lucide-react';
 
@@ -391,7 +391,7 @@ const SelfCareChecklist: React.FC<SelfCareChecklistProps> = ({ show, onClose }) 
                       {item.completed ? <CheckCircle size={24} /> : <Circle size={24} />}
                     </CheckIcon>
                     <ItemIcon completed={item.completed}>
-                      {React.createElement(item.icon, { size: 20 })}
+                      <item.icon size={20} />
                     </ItemIcon>
                     <ItemContent>
                       <ItemTitle completed={item.completed}>
