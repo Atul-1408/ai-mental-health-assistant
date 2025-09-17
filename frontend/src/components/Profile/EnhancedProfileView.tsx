@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { User, Camera, Save, Edit3, MapPin, Calendar, Briefcase, Phone, Mail, Trophy, Refresh } from 'lucide-react';
+import { User, Camera, Save, Edit3, MapPin, Calendar, Briefcase, Phone, Mail, Trophy, RefreshCw } from 'lucide-react';
 import apiService from '../../services/api';
 
 const ProfileContainer = styled.div`
@@ -443,7 +443,7 @@ const EnhancedProfileView: React.FC = () => {
           </AvatarContainer>
           <div>
             <Button onClick={generateRandomAvatar} style={{ marginBottom: '0.5rem' }}>
-              <Refresh size={16} />
+              <RefreshCw size={16} />
               Random Avatar
             </Button>
             <p style={{ color: 'rgba(255, 255, 255, 0.6)', fontSize: '0.9rem' }}>
