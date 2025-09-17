@@ -15,3 +15,6 @@ python-cors==1.7.0
 # Development
 black==23.11.0
 isort==5.12.0
+
+# Testing
+requests==2.31.0

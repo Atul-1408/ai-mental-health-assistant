@@ -169,6 +169,43 @@ class ApiService {
       throw new Error(error.response?.data?.detail || 'Failed to fetch supported emotions');
     }
   }
+
+  // Profile Management
+  async getUserProfile(userId: string): Promise<any> {
+    try {
+      const response = await this.api.get(`/api/v1/profile/${userId}`);
+      return response.data;
+    } catch (error: any) {
+      throw new Error(error.response?.data?.detail || 'Failed to fetch user profile');
+    }
+  }
+
+  async updateUserProfile(userId: string, profileData: any): Promise<any> {
+    try {
+      const response = await this.api.put(`/api/v1/profile/${userId}`, profileData);
+      return response.data;
+    } catch (error: any) {
+      throw new Error(error.response?.data?.detail || 'Failed to update profile');
+    }
+  }
+
+  async updateUserAvatar(userId: string, avatarUrl: string): Promise<any> {
+    try {
+      const response = await this.api.post(`/api/v1/profile/${userId}/avatar`, { avatar_url: avatarUrl });
+      return response.data;
+    } catch (error: any) {
+      throw new Error(error.response?.data?.detail || 'Failed to update avatar');
+    }
+  }
+
+  async getUserStats(userId: string): Promise<any> {
+    try {
+      const response = await this.api.get(`/api/v1/profile/${userId}/stats`);
+      return response.data;
+    } catch (error: any) {
+      throw new Error(error.response?.data?.detail || 'Failed to fetch user stats');
+    }
+  }
 }
 
 // Export singleton instance

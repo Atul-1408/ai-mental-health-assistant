@@ -12,7 +12,7 @@ import HomeView from './HomeView';
 import MoodTrackerView from './MoodTrackerView';
 import JournalsView from './JournalsView';
 import WellnessView from './WellnessView';
-import ProfileView from './ProfileView';
+import EnhancedProfileView from '../Profile/EnhancedProfileView';
 import SettingsView from './SettingsView';
 
 // Animations
@@ -538,7 +538,7 @@ const ModernDashboard: React.FC<ModernDashboardProps> = ({ user, onLogout, onNav
       case 'wellness':
         return <WellnessView user={user} />;
       case 'profile':
-        return <ProfileView user={user} />;
+        return <EnhancedProfileView />;
       case 'settings':
         return <SettingsView user={user} />;
       case 'dashboard':

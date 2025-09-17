@@ -159,6 +159,103 @@ async def analyze_emotion(emotion_data: dict):
         }
     }
 
+# User Profile Management endpoints
+@app.get("/api/v1/profile/{user_id}", tags=["Profile"])
+async def get_user_profile(user_id: str):
+    """Get user profile information"""
+    # In a real app, fetch from database
+    return {
+        "success": True,
+        "data": {
+            "user": {
+                "id": user_id,
+                "username": "demo",
+                "email": "demo@mindchat.com",
+                "name": "Demo User",
+                "bio": "Mental wellness enthusiast",
+                "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=" + user_id,
+                "location": "San Francisco, CA",
+                "birthday": "1990-01-01",
+                "occupation": "Software Developer",
+                "phone": "+1 (555) 123-4567",
+                "preferences": {
+                    "theme": "dark",
+                    "language": "en",
+                    "timezone": "America/Los_Angeles",
+                    "notifications": {
+                        "email": True,
+                        "push": True,
+                        "sms": False,
+                        "weekly_summary": True
+                    }
+                },
+                "privacy": {
+                    "profile_visibility": "public",
+                    "show_online_status": True,
+                    "allow_messages": True
+                },
+                "created_at": "2024-01-01T00:00:00Z",
+                "last_login": "2024-09-17T10:00:00Z"
+            }
+        }
+    }
+
+@app.put("/api/v1/profile/{user_id}", tags=["Profile"])
+async def update_user_profile(user_id: str, profile_data: dict):
+    """Update user profile information"""
+    # In a real app, validate and save to database
+    return {
+        "success": True,
+        "message": "Profile updated successfully",
+        "data": {
+            "user": {
+                "id": user_id,
+                **profile_data
+            }
+        }
+    }
+
+@app.post("/api/v1/profile/{user_id}/avatar", tags=["Profile"])
+async def update_user_avatar(user_id: str, avatar_data: dict):
+    """Update user avatar"""
+    avatar_url = avatar_data.get("avatar_url", "")
+    
+    # In a real app, handle file upload or validate URL
+    return {
+        "success": True,
+        "message": "Avatar updated successfully",
+        "data": {
+            "avatar_url": avatar_url or f"https://api.dicebear.com/7.x/avataaars/svg?seed={user_id}&background=random"
+        }
+    }
+
+@app.get("/api/v1/profile/{user_id}/stats", tags=["Profile"])
+async def get_user_stats(user_id: str):
+    """Get user wellness statistics"""
+    return {
+        "success": True,
+        "data": {
+            "stats": {
+                "total_sessions": 45,
+                "streak_days": 7,
+                "total_minutes": 1250,
+                "mood_average": 7.2,
+                "favorite_activity": "Breathing Exercises",
+                "achievements": [
+                    "First Session Complete",
+                    "7-Day Streak",
+                    "Meditation Master",
+                    "Mood Tracker Pro"
+                ],
+                "recent_moods": [
+                    {"date": "2024-09-17", "mood": 8, "notes": "Feeling great!"},
+                    {"date": "2024-09-16", "mood": 7, "notes": "Good day overall"},
+                    {"date": "2024-09-15", "mood": 6, "notes": "Average day"}
+                ]
+            }
+        }
+    }
+
 # Helper functions
 def check_media_request(message: str) -> str:
     """Check if user is requesting media content and return appropriate response with media suggestion"""
